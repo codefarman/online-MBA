@@ -1712,6 +1712,50 @@
     document.querySelectorAll('#mobileMenu a').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
+
+
+    (function(){
+  // Throttle helper
+  function throttle(fn, ms){
+    let last = 0;
+    return function(...args){
+      const now = Date.now();
+      if (now - last >= ms) { last = now; fn(...args); }
+    };
+  }
+
+  // Send scroll position to parent
+  const sendScroll = throttle(() => {
+    // send normalized scroll (0..1) and pixel position
+    const top = window.scrollY || document.documentElement.scrollTop || 0;
+    const height = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = height > 0 ? top / height : 0;
+    window.parent.postMessage({ type: 'iframe-scroll', top, pct }, '*');
+  }, 40); // ~25fps
+
+  window.addEventListener('scroll', sendScroll, { passive: true });
+
+  // Receive messages from parent (e.g., set scroll, trigger animation)
+  window.addEventListener('message', (e) => {
+    // You can validate e.origin here if you want to restrict
+    const msg = e.data || {};
+    if (msg && msg.type === 'parent-set-scroll') {
+      // set scroll inside iframe
+      window.scrollTo({ top: msg.top || 0, behavior: 'auto' });
+    } else if (msg && msg.type === 'parent-command') {
+      // custom commands: run animation, pause, resume, etc.
+      // handle accordingly
+    }
+  });
+
+  // Optional: on load notify parent about current height (useful if parent must resize iframe)
+  function sendHeight(){
+    const h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'iframe-height', height: h }, '*');
+  }
+  window.addEventListener('load', sendHeight);
+  window.addEventListener('resize', throttle(sendHeight, 200));
+})();
   </script>
 </body>
 </html>
