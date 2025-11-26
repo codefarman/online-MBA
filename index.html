@@ -1,1761 +1,593 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>EDHIKE — Premium Online MBA with 100% Placement Support</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="India's #1 platform for Online MBA. Free counselling, No Cost EMI, 100% placement assistance." />
+  <meta name="description" content="India's #1 platform for Online MBA from Amity, NMIMS, LPU & more. Free counselling, No Cost EMI, 100% placement assistance." />
 
-  <!-- Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- FIXED: Correct Material Symbols with FILL enabled -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@1&wght@100..700" rel="stylesheet">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Material Symbols -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@1&display=swap" rel="stylesheet">
-
-  <!-- AOS (scroll animations) -->
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#E53935",
+            "primary-dark": "#C62828",
+            secondary: "#2A2574",
+            accent: "#4034A3",
+            background: "#F9FAFE",
+            surface: "#FFFFFF",
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+            display: ["'Manrope'", "sans-serif"],
+          },
+          boxShadow: { glow: "0 0 60px rgba(255,51,102,0.4)" },
+          animation: {
+            float: "float 8s ease-in-out infinite",
+            pulseGlow: "pulseGlow 4s infinite",
+            slide: "slide 35s linear infinite",
+          },
+          keyframes: {
+            float: { "0%,100%": { transform: "translateY(0)" }, "50%": { transform: "translateY(-30px)" } },
+            pulseGlow: { "0%,100%": { boxShadow: "0 0 20px rgba(255,51,102,0.3)" }, "50%": { boxShadow: "0 0 50px rgba(255,51,102,0.7)" } },
+            slide: { "0%": { transform: "translateX(0)" }, "100%": { transform: "translateX(-50%)" } },
+          },
+        },
+      },
+    };
+  </script>
 
   <style>
-    :root {
-      --primary-red: #E21818;
-      --primary-red-dark: #B31212;
-      --primary-blue: #1A2B8F;
-      --accent-blue: #0B4FCD;
-      --bg-page: #F6F7FB;
-      --bg-surface: #FFFFFF;
-      --text-main: #1F2340;
-      --text-muted: #6B7280;
-      --border-soft: #E5E7EB;
-      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.12);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-page);
-      color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .font-display {
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
+    body { font-family: 'Inter', sans-serif; background: #F9FAFE; color: #1A1C2B; }
+    .font-display { font-family: 'Manrope', sans-serif; }
+    .glass { backdrop-filter: blur(14px); background: rgba(255,255,255,0.96); border: 1px solid rgba(42,37,116,0.08); }
+    .glass-card { backdrop-filter: blur(12px); background: rgba(255,255,255,0.98); border: 1px solid rgba(42,37,116,0.08); }
+    .orb { position: absolute; border-radius: 50%; filter: blur(170px); opacity: 0.07; pointer-events: none; }
     .material-symbols-outlined {
-      font-family: 'Material Symbols Outlined', sans-serif !important;
-      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 48;
+      font-family: 'Material Symbols Outlined' !important;
+      font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 48 !important;
     }
-
-    .page-container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 1.25rem;
+    .mobile-nav-enter {
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
-
-    /* Floating orbs background */
-    .orb-wrapper {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      z-index: -1;
+    .mobile-nav-open .mobile-nav-enter {
+      opacity: 1;
+      transform: translateY(0);
     }
-
-    .orb {
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(150px);
-      opacity: 0.14;
-      pointer-events: none;
-      animation: float 9s ease-in-out infinite;
-    }
-
-    .orb-red {
-      width: 380px;
-      height: 380px;
-      background: radial-gradient(circle at 30% 30%, rgba(226,24,24,0.9), transparent);
-      top: -40px;
-      left: -40px;
-    }
-
-    .orb-blue {
-      width: 520px;
-      height: 520px;
-      background: radial-gradient(circle at 70% 70%, rgba(26,43,143,0.9), transparent);
-      bottom: -80px;
-      right: -100px;
-      animation-delay: -4s;
-    }
-
-    .orb-mix {
-      width: 340px;
-      height: 340px;
-      background: radial-gradient(circle at 50% 50%, rgba(11,79,205,0.9), transparent);
-      top: 45%;
-      left: 40%;
-      transform: translate(-50%, -50%);
-      animation-delay: -2s;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-26px); }
-    }
-
-    /* Promo banner */
-    .promo-banner {
-      background: linear-gradient(120deg, var(--primary-red), #FF6B6B);
-      color: #fff;
-      padding: 0.75rem 0;
-      box-shadow: 0 8px 25px rgba(220, 38, 38, 0.4);
-    }
-
-    .promo-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      font-size: 0.9rem;
-      font-weight: 500;
-      flex-wrap: wrap;
-    }
-
-    .promo-left {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .promo-left strong {
-      color: #FACC15;
-    }
-
-    .promo-right {
-      display: flex;
-      align-items: center;
-      gap: 0.9rem;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .countdown {
+    #countdown {
       display: grid;
       grid-auto-flow: column;
       grid-auto-columns: minmax(60px, auto);
       justify-content: center;
       align-items: stretch;
       gap: 0.75rem;
-      font-weight: 800;
-      font-size: 1rem;
     }
-
     .countdown-pill {
-      background: rgba(255,255,255,0.2);
-      border-radius: 0.9rem;
-      padding: 0.55rem 0.8rem;
+      min-width: 60px;
       text-align: center;
-      min-width: 64px;
+      border-radius: 0.9rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
       line-height: 1.2;
     }
-
     .countdown-pill span {
       display: block;
-      font-weight: 800;
       font-size: 1.05em;
-    }
-
-    .btn-claim {
-      background: #fff;
-      color: var(--primary-red);
-      padding: 0.45rem 1.6rem;
-      border-radius: 999px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.25);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .btn-claim:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.32);
-    }
-
-    /* Header */
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: rgba(255,255,255,0.95);
-      backdrop-filter: blur(16px);
-      border-bottom: 1px solid #E5E7EB;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.04);
-    }
-
-    .header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.9rem 1.25rem;
-      max-width: 1120px;
-      margin: 0 auto;
-    }
-
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .logo-square {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--primary-red), #FF6B6B);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-weight: 800;
-      font-size: 1.2rem;
-      box-shadow: 0 10px 20px rgba(220,38,38,0.4);
-    }
-
-    .logo-text-main {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--primary-blue);
-    }
-
-    .logo-text-main span {
-      color: var(--primary-red);
-    }
-
-    .logo-sub {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 1.75rem;
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #4B5563;
-    }
-
-    .nav-links a {
-      position: relative;
-      padding-bottom: 2px;
-    }
-
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 2px;
-      background: var(--primary-red);
-      transition: width 0.18s ease;
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .nav-links .active {
-      color: var(--primary-red);
       font-weight: 700;
     }
-
-    .btn-apply {
-      padding: 0.4rem 1.4rem;
-      border-radius: 999px;
-      border: none;
-      color: #fff;
-      background: linear-gradient(135deg, var(--primary-red), #FF6B6B);
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 22px rgba(220,38,38,0.4);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    .promo-banner {
+      background: linear-gradient(135deg, #101624, #1c2434);
     }
-
-    .btn-apply:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 30px rgba(220,38,38,0.45);
-    }
-
-    .mobile-toggle {
-      border: none;
-      background: none;
-      font-size: 1.9rem;
-      color: var(--primary-blue);
-      cursor: pointer;
-      display: none;
-    }
-
-    /* Mobile nav drawer */
-    .mobile-menu {
-      display: none;
-      background: #fff;
-      border-bottom: 1px solid #E5E7EB;
-      box-shadow: 0 10px 25px rgba(15,23,42,0.10);
-    }
-
-    .mobile-menu-inner {
-      padding: 0.5rem 1.25rem 0.9rem;
-    }
-
-    .mobile-menu-nav a {
-      display: block;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid #F3F4F6;
-      font-weight: 600;
-      color: #4B5563;
-    }
-
-    .mobile-menu-nav a:last-child {
-      border-bottom: none;
-    }
-
-    .mobile-menu-nav a.active {
-      color: var(--primary-red);
-    }
-
-    .mobile-book-btn {
-      margin-top: 0.75rem;
-      width: 100%;
-      border-radius: 999px;
-      background: var(--primary-red);
-      color: #fff;
-      padding: 0.75rem 1rem;
-      border: none;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 12px 28px rgba(220,38,38,0.45);
-    }
-
-    .mobile-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(15,23,42,0.5);
-      backdrop-filter: blur(2px);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s ease;
-      z-index: 30;
-      display: none;
-    }
-
-    /* Hero */
-    .hero {
-      padding: 3.5rem 0 3.25rem;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-      gap: 3rem;
-      align-items: center;
-    }
-
-    .hero-kicker {
-      font-size: 0.75rem;
-      letter-spacing: 0.16em;
-      color: var(--primary-red);
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .hero-title {
-      margin-top: 1.4rem;
-      font-size: clamp(2.4rem, 4vw + 1.4rem, 3.8rem);
-      font-weight: 900;
-      line-height: 1.05;
-    }
-
-    .hero-title span {
-      background: linear-gradient(120deg, var(--primary-red), #FF6B6B);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .hero-text {
-      margin-top: 1.3rem;
-      font-size: 1.05rem;
-      color: var(--text-muted);
-      max-width: 32rem;
-    }
-
-    .hero-buttons {
-      margin-top: 1.8rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-    }
-
-    .btn-primary-large {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.9rem 1.7rem;
-      border-radius: 1.3rem;
-      border: none;
-      background: linear-gradient(135deg, var(--primary-red), #FF6B6B);
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.98rem;
-      box-shadow: 0 14px 30px rgba(220,38,38,0.5);
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .btn-primary-large:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 18px 36px rgba(220,38,38,0.55);
-    }
-
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      padding: 0.9rem 1.7rem;
-      border-radius: 1.3rem;
-      border: 1px solid #D1D5DB;
-      background: rgba(255,255,255,0.9);
-      color: #111827;
-      font-weight: 500;
-      cursor: pointer;
-      transition: background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .btn-outline:hover {
-      background: #F3F4F6;
-      border-color: #9CA3AF;
-      box-shadow: 0 12px 28px rgba(15,23,42,0.18);
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.3rem;
-      max-width: 22rem;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 1.9rem;
-      font-weight: 900;
-      color: var(--primary-red);
-    }
-
-    .stat-label {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 0.3rem;
-    }
-
-    /* Lead form card */
-    .card {
-      background: var(--bg-surface);
-      border-radius: 1.7rem;
-      padding: 1.8rem 1.9rem 1.7rem;
-      border: 1px solid var(--border-soft);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .card-header-icon {
-      width: 64px;
-      height: 64px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, var(--primary-red), #FF6B6B);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 0.9rem;
-      box-shadow: 0 12px 26px rgba(220,38,38,0.45);
-    }
-
-    .card-title {
-      text-align: center;
-      font-size: 1.45rem;
-      font-weight: 800;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-
-    .card-subtitle {
-      margin-top: 0.4rem;
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    .form-field {
-      margin-top: 0.95rem;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 0.85rem 1.1rem;
-      border-radius: 0.9rem;
-      border: 1px solid #D1D5DB;
-      background: #F9FAFB;
-      font-size: 0.95rem;
-      outline: none;
-      transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
-    }
-
-    .form-input:focus {
-      border-color: var(--primary-red);
-      background: #fff;
-      box-shadow: 0 0 0 2px rgba(226,24,24,0.16);
-    }
-
-    .btn-submit {
-      width: 100%;
-      margin-top: 1rem;
-      padding: 0.95rem 1rem;
-      border-radius: 0.9rem;
-      border: none;
-      background: linear-gradient(135deg, var(--primary-red), #FF6B6B);
-      color: #fff;
-      font-weight: 800;
-      font-size: 1rem;
-      cursor: pointer;
-      box-shadow: 0 14px 30px rgba(220,38,38,0.55);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .btn-submit:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 18px 38px rgba(220,38,38,0.6);
-    }
-
-    .form-footnote {
-      margin-top: 0.6rem;
-      text-align: center;
-      font-size: 0.72rem;
-      color: #9CA3AF;
-    }
-
-    .form-footnote a {
-      color: var(--primary-red);
-    }
-
-    .form-success {
-      text-align: center;
-      padding: 2.5rem 1rem 2.1rem;
-      display: none;
-    }
-
-    .form-success-icon {
-      font-size: 3.2rem;
-      color: #22C55E;
-      margin-bottom: 0.7rem;
-    }
-
-    /* Trusted universities */
-    .section {
-      padding: 3.2rem 0;
-    }
-
-    .section-heading {
-      text-align: center;
-      font-weight: 800;
-      margin-bottom: 0.4rem;
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--primary-red);
-    }
-
-    .logo-grid {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 1.7rem;
-      align-items: center;
-      justify-items: center;
-      opacity: 0.9;
-    }
-
-    .logo-grid img {
-      max-height: 44px;
-      object-fit: contain;
-      filter: saturate(0.9);
-    }
-
-    /* Advantage cards */
-    .section-title {
-      text-align: center;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2.1rem;
-      margin-top: 0.3rem;
-      font-weight: 900;
-    }
-
-    .adv-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.1rem;
-    }
-
-    .adv-card {
-      background: var(--bg-surface);
-      border-radius: 1.5rem;
-      padding: 1.5rem 1.4rem 1.4rem;
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 10px 22px rgba(15,23,42,0.08);
-      text-align: center;
-      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
-    }
-
-    .adv-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 18px 36px rgba(15,23,42,0.12);
-      border-color: rgba(11,79,205,0.4);
-    }
-
-    .adv-icon {
-      width: 54px;
-      height: 54px;
-      border-radius: 1.1rem;
-      margin: 0 auto 1rem;
-      background: linear-gradient(135deg, var(--primary-blue), var(--accent-blue));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      box-shadow: 0 12px 24px rgba(37,99,235,0.5);
-    }
-
-    .adv-title {
-      font-weight: 700;
-      margin-bottom: 0.45rem;
-    }
-
-    .adv-text {
-      font-size: 0.86rem;
-      color: var(--text-muted);
-    }
-
-    /* Career cards */
-    .career-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1.5rem;
-      margin-top: 2.3rem;
-    }
-
-    .career-card {
-      background: var(--bg-surface);
-      border-radius: 1.6rem;
-      padding: 1.6rem 1.5rem;
-      border: 1px solid var(--border-soft);
-      box-shadow: 0 14px 30px rgba(15,23,42,0.10);
-      text-align: center;
-      transition: box-shadow 0.18s ease, transform 0.18s ease;
-    }
-
-    .career-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 42px rgba(15,23,42,0.16);
-    }
-
-    .career-icon {
-      font-size: 2.7rem;
-      color: var(--primary-red);
-      margin-bottom: 0.9rem;
-    }
-
-    .career-role {
-      font-weight: 700;
-      font-size: 1.2rem;
-    }
-
-    .career-salary {
-      margin-top: 0.5rem;
-      font-weight: 900;
-      font-size: 1.7rem;
-      color: var(--primary-red);
-    }
-
-    /* Testimonials carousel (simple auto slide using CSS animation) */
-    .testimonials {
-      background: rgba(255,255,255,0.96);
-      border-top: 1px solid #E5E7EB;
-      border-bottom: 1px solid #E5E7EB;
-    }
-
-    .testimonials-track {
-      display: flex;
-      gap: 1.4rem;
-      animation: slideTrack 36s linear infinite;
-      will-change: transform;
-    }
-
-    .testimonial-card {
-      min-width: 280px;
-      max-width: 320px;
-      background: #fff;
-      border-radius: 1.5rem;
-      padding: 1.5rem 1.4rem 1.4rem;
-      border: 1px solid #E5E7EB;
-      box-shadow: 0 10px 24px rgba(15,23,42,0.10);
-      transition: border-color 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .testimonial-card:hover {
-      border-color: rgba(226,24,24,0.5);
-      box-shadow: 0 18px 40px rgba(15,23,42,0.2);
-    }
-
-    .testimonial-head {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      margin-bottom: 0.9rem;
-    }
-
-    .testimonial-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 999px;
-      object-fit: cover;
-      border: 3px solid #E5E7EB;
-    }
-
-    .testimonial-name {
-      font-weight: 700;
-      font-size: 0.98rem;
-    }
-
-    .testimonial-role {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-    }
-
-    .testimonial-text {
-      font-size: 0.88rem;
-      color: #4B5563;
-      font-style: italic;
-    }
-
-    .testimonial-rating {
-      margin-top: 0.7rem;
-      font-size: 0.85rem;
-      color: #FBBF24;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .testimonial-outcome {
-      margin-top: 0.5rem;
-      color: var(--primary-red);
-      font-weight: 700;
-      font-size: 0.86rem;
-    }
-
-    @keyframes slideTrack {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    /* Curriculum */
-    .curriculum-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-      gap: 2.7rem;
-      align-items: center;
-    }
-
-    .skill-bar {
-      margin-top: 1.05rem;
-    }
-
-    .skill-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.86rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .skill-label {
-      font-weight: 600;
-    }
-
-    .skill-value {
-      font-weight: 700;
-      color: var(--primary-red);
-    }
-
-    .skill-track {
-      height: 0.72rem;
-      background: #E5E7EB;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-
-    .skill-fill {
-      height: 100%;
-      background: linear-gradient(120deg, var(--primary-red), #FF6B6B);
-      border-radius: 999px;
-      width: 0;
-    }
-
-    .spec-chip {
-      display: inline-block;
-      padding: 0.6rem 1.2rem;
-      border-radius: 999px;
-      background: rgba(226,24,24,0.06);
-      color: var(--primary-red);
-      font-size: 0.86rem;
-      font-weight: 600;
-      margin: 0 0.4rem 0.6rem 0;
-    }
-
-    /* FAQ */
-    .faq-card {
-      background: #fff;
-      border-radius: 1.4rem;
-      border: 1px solid #E5E7EB;
-      overflow: hidden;
-      box-shadow: 0 10px 24px rgba(15,23,42,0.10);
-    }
-
-    .faq-summary {
-      padding: 0.95rem 1.4rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.96rem;
-      color: #111827;
-      background: #fff;
-      transition: background 0.18s ease;
-    }
-
-    .faq-summary:hover {
-      background: #F3F4F6;
-    }
-
-    .faq-body {
-      padding: 0 1.4rem 1rem;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      border-top: 1px solid #E5E7EB;
-    }
-
-    /* Footer */
-    footer {
-      background: #fff;
-      border-top: 1px solid #E5E7EB;
-      padding: 2.8rem 0 2.1rem;
-      margin-top: 1.5rem;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 1.7rem;
-      align-items: flex-start;
-    }
-
-    .footer-title {
-      font-weight: 700;
-      margin-bottom: 0.6rem;
-    }
-
-    .footer-links a {
-      display: block;
-      font-size: 0.86rem;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
-    }
-
-    .footer-links a:hover {
-      color: var(--primary-red);
-    }
-
-    .footer-text {
-      font-size: 0.86rem;
-      color: var(--text-muted);
-    }
-
-    .footer-subscribe {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .footer-input {
-      padding: 0.7rem 0.9rem;
-      border-radius: 0.9rem;
-      border: 1px solid #D1D5DB;
-      background: #F9FAFB;
-      font-size: 0.86rem;
-      outline: none;
-    }
-
-    .footer-button {
-      align-self: flex-start;
-      padding: 0.7rem 1.2rem;
-      border-radius: 0.9rem;
-      border: none;
-      background: var(--primary-red);
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.88rem;
-      cursor: pointer;
-    }
-
-    .footer-bottom {
-      text-align: center;
-      margin-top: 1.9rem;
-      font-size: 0.78rem;
-      color: #9CA3AF;
-    }
-
-    /* WhatsApp floating */
-    .whatsapp-float {
-      position: fixed;
-      right: 1.3rem;
-      bottom: 1.3rem;
-      z-index: 35;
-      background: #22C55E;
-      color: #fff;
-      padding: 0.75rem 1.1rem;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      box-shadow: 0 18px 36px rgba(22,163,74,0.7);
-      transition: transform 0.18s ease, box-shadow 0.18s ease;
-    }
-
-    .whatsapp-float:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 22px 44px rgba(22,163,74,0.75);
-    }
-
-    .whatsapp-icon {
-      width: 22px;
-      height: 22px;
-    }
-
-    /* Mobile bottom CTA */
-    .mobile-cta {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(120deg, var(--primary-red), #FF6B6B);
-      color: #fff;
-      text-align: center;
-      padding: 0.7rem 0.5rem 0.85rem;
-      font-weight: 700;
-      font-size: 0.98rem;
-      display: none;
-      z-index: 35;
-      box-shadow: 0 -12px 26px rgba(220,38,38,0.6);
-    }
-
-    .mobile-cta a {
-      color: #fff;
-    }
-
-    /* Responsive */
     @media (max-width: 1024px) {
-      .hero-grid {
-        grid-template-columns: minmax(0,1.05fr) minmax(0,1fr);
-        gap: 2.2rem;
-      }
-
-      .adv-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-
-      .career-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-
-      .curriculum-grid {
-        grid-template-columns: minmax(0,1fr);
-      }
-
-      .footer-grid {
-        grid-template-columns: repeat(2, minmax(0,1fr));
-      }
-
-      .hero-buttons .btn-primary-large,
-      .hero-buttons .btn-outline {
-        width: 100%;
-        justify-content: center;
-      }
+      header .container { gap: 1rem; }
+      #heroButtons a { width: 100%; justify-content: center; }
+      .floating-cta { padding-bottom: 1.25rem; }
     }
-
     @media (max-width: 768px) {
-      .promo-inner {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .hero {
-        padding-top: 2.4rem;
-      }
-
-      .hero-grid {
-        grid-template-columns: minmax(0,1fr);
-      }
-
-      .hero-title {
-        text-align: center;
-      }
-
-      .hero-text {
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .hero-buttons {
-        flex-direction: column;
-      }
-
-      .hero-stats {
-        grid-template-columns: repeat(2,minmax(0,1fr));
-      }
-
-      .logo-grid {
-        grid-template-columns: repeat(3,minmax(0,1fr));
-      }
-
-      .career-grid {
-        grid-template-columns: minmax(0,1fr);
-      }
-
-      .adv-grid {
-        grid-template-columns: minmax(0,1fr);
-      }
-
-      .footer-grid {
-        grid-template-columns: minmax(0,1fr);
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      .mobile-toggle {
-        display: block;
-      }
-
-      .mobile-cta {
-        display: block;
-      }
-
-      .whatsapp-float {
-        bottom: 4rem;
+      h1 { font-size: 2.75rem !important; }
+      .promo-banner { text-align: center; }
+      .promo-banner .flex { flex-direction: column; }
+      .hero-text { text-align: center; }
+      .grid-stat { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .testimonial-track { animation-duration: 45s; }
+      #countdown { grid-auto-columns: minmax(56px, 1fr); gap: 0.55rem; padding: 0 0.5rem; }
+      .countdown-pill { font-size: 0.95rem; padding: 0.4rem 0.5rem; }
+      .floating-whatsapp {
+        right: 1rem;
+        bottom: 5.5rem;
       }
     }
   </style>
 </head>
-<body>
+<body class="min-h-screen overflow-x-hidden">
 
-  <!-- Floating orbs -->
-  <div class="orb-wrapper">
-    <div class="orb orb-red"></div>
-    <div class="orb orb-blue"></div>
-    <div class="orb orb-mix"></div>
+  <!-- Floating Orbs -->
+  <div class="fixed inset-0 -z-10 overflow-hidden">
+    <div class="orb w-96 h-96 bg-gradient-to-br from-primary to-transparent top-10 left-10 animate-float"></div>
+    <div class="orb w-[700px] h-[700px] bg-gradient-to-r from-accent to-transparent bottom-0 right-0 animate-float" style="animation-delay: -4s;"></div>
+    <div class="orb w-80 h-80 bg-gradient-to-t from-secondary to-transparent top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-float" style="animation-delay: -2s;"></div>
   </div>
 
-  <!-- Promo banner -->
-  <div class="promo-banner">
-    <div class="page-container promo-inner">
-      <div class="promo-left" data-aos="fade-right">
-        <span class="material-symbols-outlined" style="color:#FACC15;">local_fire_department</span>
-        <span>Limited Time: <strong>20% OFF + Free Career Kit ₹25,000</strong></span>
+  <!-- Promo Banner -->
+  <div class="promo-banner text-white py-3 shadow-2xl z-40 relative">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm font-medium">
+      <div class="flex items-center gap-3 animate-pulse">
+        <span class="material-symbols-outlined text-yellow-300">local_fire_department</span>
+        <span>Limited Time: <strong class="text-yellow-300">20% OFF + Free Career Kit ₹25,000</strong></span>
       </div>
-      <div class="promo-right" data-aos="fade-left">
-        <div id="countdown" class="countdown">
-          <span class="countdown-pill"><span id="cd-hrs">72</span>h</span>
-          <span class="countdown-pill"><span id="cd-min">00</span>m</span>
-          <span class="countdown-pill"><span id="cd-sec">00</span>s</span>
+      <div class="flex items-center flex-wrap justify-center gap-4">
+        <div id="countdown" class="font-bold text-lg text-white">
+          <span class="countdown-pill bg-white/15"><span id="cd-hrs">72</span>h</span>
+          <span class="countdown-pill bg-white/15"><span id="cd-min">00</span>m</span>
+          <span class="countdown-pill bg-white/15"><span id="cd-sec">00</span>s</span>
         </div>
-        <button class="btn-claim" onclick="document.getElementById('book-call').scrollIntoView({behavior:'smooth'})">
-          Claim Now
-        </button>
+        <a href="#book-call" class="bg-white text-primary font-bold px-6 py-2 rounded-full hover:scale-105 transition shadow-lg w-full sm:w-auto text-center">Claim Now</a>
       </div>
     </div>
   </div>
 
   <!-- Header -->
-  <header>
-    <div class="header-inner">
-      <a href="#" class="logo-wrap">
-        <div class="logo-square">E</div>
+  <header class="sticky top-0 z-50 bg-white/95 border-b border-slate-200 backdrop-blur-xl shadow-sm">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-4">
+        <svg width="48" height="48" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-glow">
+          <rect width="64" height="64" rx="18" fill="url(#logoGrad)"/>
+          <path d="M17 41V23L30 28V41" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M33 23L47 29V41L33 35V23Z" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs>
+            <linearGradient id="logoGrad" x1="0" y1="0" x2="64" y2="64">
+              <stop stop-color="#E53935"/>
+              <stop offset="1" stop-color="#2A2574"/>
+            </linearGradient>
+          </defs>
+        </svg>
         <div>
-          <div class="logo-text-main font-display">ED<span>HIKE</span></div>
-          <div class="logo-sub">Premium Online MBA • 100% Placement Support</div>
+          <div class="text-2xl font-bold font-display text-secondary">ED<span class="text-primary">HIKE</span></div>
+          <div class="text-xs text-slate-500">Premium Online MBA • 100% Placement Support</div>
         </div>
       </a>
 
-      <nav class="nav-links">
-        <a href="#programs">Programs</a>
-        <a href="#online-mba" class="active">Online MBA</a>
-        <a href="#curriculum">Curriculum</a>
-        <a href="#testimonials">Testimonials</a>
-        <button class="btn-apply" onclick="document.getElementById('book-call').scrollIntoView({behavior:'smooth'})">Apply Now</button>
+      <nav class="hidden lg:flex items-center gap-8 text-slate-700 font-medium">
+        <a href="#programs" class="hover:text-primary transition">Programs</a>
+        <a href="#online-mba" class="text-primary font-bold">Online MBA</a>
+        <a href="#curriculum" class="hover:text-primary transition">Curriculum</a>
+        <a href="#testimonials" class="hover:text-primary transition">Testimonials</a>
+        <a href="#book-call" class="bg-primary text-white px-6 py-2 rounded-full font-bold hover:shadow-glow transition transform hover:scale-105">Apply Now</a>
       </nav>
 
-      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+      <button id="mobileToggle" class="lg:hidden text-3xl text-secondary" aria-label="Open menu" aria-expanded="false">
         <span class="material-symbols-outlined">menu</span>
       </button>
     </div>
 
-    <!-- Mobile menu -->
-    <div class="mobile-menu" id="mobileMenu">
-      <div class="mobile-menu-inner">
-        <div class="mobile-menu-nav">
-          <a href="#programs">Programs</a>
-          <a href="#online-mba" class="active">Online MBA</a>
-          <a href="#curriculum">Curriculum</a>
-          <a href="#testimonials">Testimonials</a>
-          <a href="#faq">FAQ</a>
-        </div>
-        <button class="mobile-book-btn" onclick="document.getElementById('book-call').scrollIntoView({behavior:'smooth'})">
-          Book a Free Call
-        </button>
+    <!-- Mobile nav -->
+    <div id="mobileMenu" class="mobile-nav-enter lg:hidden hidden bg-white border-b border-slate-200 shadow-lg">
+      <div class="px-6 pb-6 space-y-4">
+        <nav class="flex flex-col gap-3 text-slate-700 font-semibold text-lg">
+          <a href="#programs" class="py-3 border-b border-slate-100">Programs</a>
+          <a href="#online-mba" class="py-3 border-b border-slate-100 text-primary">Online MBA</a>
+          <a href="#curriculum" class="py-3 border-b border-slate-100">Curriculum</a>
+          <a href="#testimonials" class="py-3 border-b border-slate-100">Testimonials</a>
+          <a href="#faq" class="py-3 border-b border-slate-100">FAQ</a>
+        </nav>
+        <a href="#book-call" class="block text-center bg-primary text-white py-4 rounded-2xl font-bold shadow-glow">Book a Free Call</a>
       </div>
     </div>
   </header>
 
-  <div class="mobile-overlay" id="mobileOverlay"></div>
+  <div id="mobileOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 opacity-0 pointer-events-none hidden transition-opacity duration-200 lg:hidden"></div>
 
   <!-- Hero -->
-  <section class="hero" id="online-mba">
-    <div class="page-container hero-grid">
-      <div data-aos="fade-up">
-        <div class="hero-kicker">Trusted by 1,20,000+ Professionals</div>
-        <h1 class="hero-title font-display">
-          Your <span>Dream MBA</span><br>Starts Here
+  <section id="online-mba" class="py-16 lg:py-28 relative">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
+      <div data-aos="fade-up" class="hero-text">
+        <span class="text-secondary font-semibold uppercase tracking-[0.3em] text-xs">Trusted by 1,20,000+ Professionals</span>
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black font-display mt-6 leading-tight text-secondary">
+          Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-secondary to-accent">Dream MBA</span><br/>Starts Here
         </h1>
-        <p class="hero-text">
-          UGC-approved Online MBA from <strong>Amity • NMIMS • LPU • Jain</strong> with
-          <u>100% placement assistance</u>, No Cost EMI & live mentorship.
+        <p class="text-lg sm:text-xl mt-6 text-slate-600 max-w-2xl mx-auto lg:mx-0">
+          UGC-approved Online MBA from <strong>Amity • NMIMS • LPU • Jain</strong> with <u>100% placement assistance</u>, No Cost EMI & live mentorship.
         </p>
 
-        <div class="hero-buttons">
-          <button class="btn-primary-large" onclick="document.getElementById('book-call').scrollIntoView({behavior:'smooth'})">
+        <div id="heroButtons" class="flex flex-col sm:flex-row gap-4 mt-10">
+          <a href="#book-call" class="bg-primary text-white font-bold py-4 px-8 rounded-2xl shadow-xl hover:bg-primary-dark transform hover:-translate-y-1 transition text-lg flex items-center justify-center gap-3">
             Free Counselling Call
             <span class="material-symbols-outlined">arrow_forward</span>
-          </button>
-          <button class="btn-outline">
-            <span class="material-symbols-outlined">download</span>
-            Download Brochure
-          </button>
+          </a>
+          <a href="#" class="border border-slate-200 bg-white px-8 py-4 rounded-2xl font-medium hover:bg-slate-100 transition flex items-center justify-center gap-3 text-secondary">
+            <span class="material-symbols-outlined">download</span> Download Brochure
+          </a>
         </div>
 
-        <div class="hero-stats">
-          <div class="stat-item" data-aos="zoom-in" data-aos-delay="150">
-            <div class="stat-number">2 Yr</div>
-            <div class="stat-label">Duration</div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-12 max-w-2xl mx-auto lg:mx-0 grid-stat">
+          <div class="text-center" data-aos="zoom-in" data-aos-delay="200">
+            <p class="text-4xl font-black text-secondary">2 Yr</p>
+            <p class="text-sm opacity-70 mt-2">Duration</p>
           </div>
-          <div class="stat-item" data-aos="zoom-in" data-aos-delay="250">
-            <div class="stat-number">100%</div>
-            <div class="stat-label">Online</div>
+          <div class="text-center" data-aos="zoom-in" data-aos-delay="400">
+            <p class="text-4xl font-black text-secondary">100%</p>
+            <p class="text-sm opacity-70 mt-2">Online</p>
           </div>
-          <div class="stat-item" data-aos="zoom-in" data-aos-delay="350">
-            <div class="stat-number">₹12L+</div>
-            <div class="stat-label">Avg CTC</div>
+          <div class="text-center md:col-span-1 col-span-2 md:col-span-none" data-aos="zoom-in" data-aos-delay="600">
+            <p class="text-4xl font-black text-secondary">₹12L+</p>
+            <p class="text-sm opacity-70 mt-2">Avg CTC</p>
           </div>
         </div>
       </div>
 
-      <div id="book-call" data-aos="fade-left">
-        <div class="card">
-          <div class="card-header-icon">
-            <span class="material-symbols-outlined" style="font-size:2.2rem;">school</span>
+      <!-- Lead Form -->
+      <div data-aos="fade-left" id="book-call" class="glass-card p-6 sm:p-8 rounded-3xl shadow-2xl border border-slate-100 w-full">
+        <div class="text-center mb-8">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-4 animate-pulseGlow">
+            <span class="material-symbols-outlined text-4xl sm:text-5xl text-white">school</span>
           </div>
-          <h2 class="card-title">Get Free Expert Call in 30 Mins</h2>
-          <p class="card-subtitle">Zero Spam • 100% Free • Instant Callback</p>
+          <h2 class="text-2xl sm:text-3xl font-bold font-display">Get Free Expert Call in 30 Mins</h2>
+          <p class="text-slate-500 mt-2 text-sm sm:text-base">Zero Spam • 100% Free • Instant Callback</p>
+        </div>
 
-          <form id="leadForm">
-            <div class="form-field">
-              <input type="text" class="form-input" placeholder="Full Name *" required>
-            </div>
-            <div class="form-field">
-              <input type="email" class="form-input" placeholder="Email Address *" required>
-            </div>
-            <div class="form-field">
-              <input type="tel" class="form-input" placeholder="Phone Number *" required>
-            </div>
+        <form id="leadForm" class="space-y-4">
+          <input type="text" placeholder="Full Name *" required class="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 focus:border-primary focus:outline-none transition"/>
+          <input type="email" placeholder="Email Address *" required class="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 focus:border-primary focus:outline-none transition"/>
+          <input type="tel" placeholder="Phone Number *" required class="w-full px-5 py-4 rounded-xl bg-slate-50 border border-slate-200 focus:border-primary focus:outline-none transition"/>
 
-            <button type="submit" class="btn-submit">Yes! Call Me FREE</button>
-            <p class="form-footnote">
-              By submitting, you agree to our <a href="#">Privacy Policy</a>.
-            </p>
-          </form>
+          <button type="submit" class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-xl hover:bg-primary-dark transform hover:scale-105 transition text-lg">
+            Yes! Call Me FREE
+          </button>
+          <p class="text-xs text-center text-slate-500">By submitting, you agree to our <a href="#" class="text-primary underline">Privacy Policy</a></p>
+        </form>
 
-          <div class="form-success" id="formSuccess">
-            <div class="form-success-icon">✔</div>
-            <h3 class="card-title" style="margin-bottom:0.3rem;">Thank You!</h3>
-            <p class="card-subtitle" style="margin-top:0;">
-              Our counsellor will call you in <strong>less than 30 minutes</strong>.
-            </p>
-          </div>
+        <div id="formSuccess" class="hidden text-center py-10">
+          <span class="material-symbols-outlined text-green-400 text-6xl sm:text-7xl mb-4">check_circle</span>
+          <h3 class="text-2xl font-bold">Thank You!</h3>
+          <p class="mt-3 text-slate-600">Our counsellor will call you in <strong>less than 30 minutes</strong>.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Trusted Universities -->
-  <section class="section" id="programs">
-    <div class="page-container">
-      <div class="section-heading">In Partnership With India's Top Universities</div>
-      <div class="logo-grid" data-aos="fade-up">
-        <!-- replace src with your own logos -->
-        <img src="amity.png" alt="Amity">
-        <img src="nmims.png" alt="NMIMS">
-        <img src="lpu.png" alt="LPU">
-        <img src="jain.png" alt="Jain">
-        <img src="manipal.png" alt="Manipal">
-        <img src="dypatil.png" alt="DY Patil">
+  <section id="programs" class="py-16 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+      <p class="text-primary font-bold uppercase tracking-wider">In Partnership With India's Top Universities</p>
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 sm:gap-10 mt-12 items-center opacity-80 hover:opacity-100 transition-all duration-700">
+        <img src="amity.png" alt="Amity" class="h-10 sm:h-12 mx-auto"/>
+        <img src="nmims.png" alt="NMIMS" class="h-10 sm:h-12 mx-auto"/>
+        <img src="lpu.png" alt="LPU" class="h-10 sm:h-12 mx-auto"/>
+        <img src="jain.png" alt="Jain" class="h-10 sm:h-12 mx-auto"/>
+        <img src="manipal.png" alt="Manipal" class="h-10 sm:h-12 mx-auto"/>
+        <img src="dypatil.png" alt="DY Patil" class="h-10 sm:h-12 mx-auto"/>
       </div>
     </div>
   </section>
 
   <!-- Advantages -->
-  <section class="section">
-    <div class="page-container">
-      <div class="section-heading">Why Choose EDHIKE?</div>
-      <h2 class="section-title">The Ultimate Advantage</h2>
+  <section class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="text-primary font-bold uppercase tracking-widest text-sm">Why Choose EDHIKE?</span>
+        <h2 class="text-4xl sm:text-5xl font-black font-display mt-4">The Ultimate Advantage</h2>
+      </div>
 
-      <div class="adv-grid">
-        <div class="adv-card" data-aos="fade-up">
-          <div class="adv-icon">
-            <span class="material-symbols-outlined">support_agent</span>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center hover:-translate-y-3 transition" data-aos="fade-up">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary rounded-2xl mx-auto mb-5 flex items-center justify-center shadow-glow text-white">
+            <span class="material-symbols-outlined text-3xl sm:text-4xl text-white">support_agent</span>
           </div>
-          <div class="adv-title">Free Counselling</div>
-          <div class="adv-text">
-            Get personalized guidance and support throughout your journey.
-          </div>
+          <h3 class="text-lg font-bold text-secondary">Free Counselling</h3>
+          <p class="text-slate-500 mt-3 text-sm">Get personalized guidance and support throughout your journey.</p>
         </div>
-
-        <div class="adv-card" data-aos="fade-up" data-aos-delay="100">
-          <div class="adv-icon">
-            <span class="material-symbols-outlined">credit_card_off</span>
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center hover:-translate-y-3 transition" data-aos="fade-up" data-aos-delay="100">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary rounded-2xl mx-auto mb-5 flex items-center justify-center shadow-glow text-white">
+            <span class="material-symbols-outlined text-3xl sm:text-4xl text-white">credit_card_off</span>
           </div>
-          <div class="adv-title">No Cost EMI</div>
-          <div class="adv-text">
-            Pay your fees in easy monthly installments with 0% interest.
-          </div>
+          <h3 class="text-lg font-bold text-secondary">No Cost EMI</h3>
+          <p class="text-slate-500 mt-3 text-sm">Pay your fees in easy monthly installments with 0% interest.</p>
         </div>
-
-        <div class="adv-card" data-aos="fade-up" data-aos-delay="200">
-          <div class="adv-icon">
-            <span class="material-symbols-outlined">work</span>
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center hover:-translate-y-3 transition" data-aos="fade-up" data-aos-delay="200">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary rounded-2xl mx-auto mb-5 flex items-center justify-center shadow-glow text-white">
+            <span class="material-symbols-outlined text-3xl sm:text-4xl text-white">work</span>
           </div>
-          <div class="adv-title">100% Placement Help</div>
-          <div class="adv-text">
-            Dedicated placement team to land your dream job.
-          </div>
+          <h3 class="text-lg font-bold text-secondary">100% Placement Help</h3>
+          <p class="text-slate-500 mt-3 text-sm">Dedicated placement team to land your dream job.</p>
         </div>
-
-        <div class="adv-card" data-aos="fade-up" data-aos-delay="300">
-          <div class="adv-icon">
-            <span class="material-symbols-outlined">record_voice_over</span>
+        <div class="glass-card p-6 sm:p-8 rounded-3xl text-center hover:-translate-y-3 transition" data-aos="fade-up" data-aos-delay="300">
+          <div class="w-14 h-14 sm:w-16 sm:h-16 bg-secondary rounded-2xl mx-auto mb-5 flex items-center justify-center shadow-glow text-white">
+            <span class="material-symbols-outlined text-3xl sm:text-4xl text-white">record_voice_over</span>
           </div>
-          <div class="adv-title">Live Mentorship</div>
-          <div class="adv-text">
-            1-on-1 mentorship from industry experts.
-          </div>
+          <h3 class="text-lg font-bold text-secondary">Live Mentorship</h3>
+          <p class="text-slate-500 mt-3 text-sm">1-on-1 mentorship from industry experts.</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Career Outcomes -->
-  <section class="section">
-    <div class="page-container">
-      <div class="section-heading">Career Growth</div>
-      <h2 class="section-title">Average Salary After MBA</h2>
-
-      <div class="career-grid">
-        <div class="career-card" data-aos="zoom-in">
-          <div class="career-icon material-symbols-outlined">trending_up</div>
-          <div class="career-role">Product Manager</div>
-          <div class="career-salary">₹18–35 LPA</div>
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 text-center">
+      <span class="text-primary font-bold uppercase tracking-widest text-sm" data-aos="fade-up">Career Growth</span>
+      <h2 class="text-4xl sm:text-5xl font-black font-display mt-4" data-aos="fade-up">Average Salary After MBA</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-14">
+        <div class="glass-card p-8 rounded-3xl hover:shadow-glow transition" data-aos="zoom-in">
+          <span class="material-symbols-outlined text-5xl text-primary mb-6">trending_up</span>
+          <h3 class="text-2xl font-bold">Product Manager</h3>
+          <p class="text-3xl font-black text-primary mt-4">₹18–35 LPA</p>
         </div>
-        <div class="career-card" data-aos="zoom-in" data-aos-delay="150">
-          <div class="career-icon material-symbols-outlined">lightbulb</div>
-          <div class="career-role">Management Consultant</div>
-          <div class="career-salary">₹15–30 LPA</div>
+        <div class="glass-card p-8 rounded-3xl hover:shadow-glow transition" data-aos="zoom-in" data-aos-delay="150">
+          <span class="material-symbols-outlined text-5xl text-primary mb-6">lightbulb</span>
+          <h3 class="text-2xl font-bold">Management Consultant</h3>
+          <p class="text-3xl font-black text-primary mt-4">₹15–30 LPA</p>
         </div>
-        <div class="career-card" data-aos="zoom-in" data-aos-delay="300">
-          <div class="career-icon material-symbols-outlined">account_balance_wallet</div>
-          <div class="career-role">Finance Roles</div>
-          <div class="career-salary">₹12–28 LPA</div>
+        <div class="glass-card p-8 rounded-3xl hover:shadow-glow transition" data-aos="zoom-in" data-aos-delay="300">
+          <span class="material-symbols-outlined text-5xl text-primary mb-6">account_balance_wallet</span>
+          <h3 class="text-2xl font-bold">Finance Roles</h3>
+          <p class="text-3xl font-black text-primary mt-4">₹12–28 LPA</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- Testimonials -->
-  <section class="section testimonials" id="testimonials">
-    <div class="page-container">
-      <div class="section-heading">Success Stories</div>
-      <h2 class="section-title">1,20,000+ Careers Transformed</h2>
-      <p style="text-align:center;margin-top:0.6rem;color:var(--text-muted);">
-        Real people. Real results.
-      </p>
+  <section id="testimonials" class="py-20 relative overflow-hidden bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12" data-aos="fade-up">
+        <span class="text-primary font-bold uppercase tracking-widest text-sm">Success Stories</span>
+        <h2 class="text-4xl sm:text-5xl font-black font-display mt-4">1,20,000+ Careers Transformed</h2>
+        <p class="text-lg sm:text-xl text-slate-500 mt-4">Real people. Real results.</p>
+      </div>
 
-      <div style="overflow:hidden;margin-top:2.2rem;">
-        <div class="testimonials-track">
-          <!-- duplicate items for infinite effect -->
-          <!-- set 1 -->
-          <div class="testimonial-card">
-            <div class="testimonial-head">
-              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80" class="testimonial-avatar" alt="">
-              <div>
-                <div class="testimonial-name">Priya Sharma</div>
-                <div class="testimonial-role">Senior Product Manager, Google</div>
+      <div x-data="{
+        testimonials: [
+          { name: 'Priya Sharma', role: 'Senior Product Manager, Google', text: 'From 8 LPA to 32 LPA in 14 months. EDHIKE changed my life!', outcome: '4x salary increase', photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80' },
+          { name: 'Rahul Verma', role: 'VP Marketing, Flipkart', text: 'Got 3 offers within 45 days. The placement team is incredible!', outcome: 'From 12 to 28 LPA', photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80' },
+          { name: 'Ananya Patel', role: 'Finance Manager, Deloitte', text: 'World-class curriculum and unmatched placement support.', outcome: 'Promoted twice in 18 months', photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80' },
+          { name: 'Vikram Singh', role: 'CEO & Founder', text: 'Raised $2M after MBA. Thank you EDHIKE!', outcome: 'Founded unicorn startup', photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80' },
+          { name: 'Neha Kapoor', role: 'Head of HR, Amazon', text: 'Switched from IT to HR leadership. Best decision ever!', outcome: '9 to 35 LPA', photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80' },
+          { name: 'Arjun Mehta', role: 'Investment Banker, JP Morgan', text: 'Now earning in dollars. Dream come true!', outcome: '$120K package', photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80' }
+        ]
+      }" class="relative">
+        <div class="overflow-hidden">
+          <div class="flex animate-slide gap-6 testimonial-track" style="width: calc(320px * 12 + 2.5rem * 11);">
+            <template x-for="t in [...testimonials, ...testimonials]" :key="t.name">
+              <div class="w-72 sm:w-80 flex-shrink-0">
+                <div class="glass-card p-6 sm:p-8 rounded-3xl h-full border border-slate-100 hover:border-primary/60 transition-all duration-500">
+                  <div class="flex items-center gap-4 mb-6">
+                    <img :src="t.photo" alt="testimonial" class="w-14 h-14 rounded-full object-cover ring-4 ring-slate-100">
+                    <div>
+                      <h4 class="font-bold text-base sm:text-lg" x-text="t.name"></h4>
+                      <p class="text-sm text-slate-500" x-text="t.role"></p>
+                    </div>
+                  </div>
+                  <p class="text-slate-600 italic leading-relaxed text-sm sm:text-base" x-text="t.text"></p>
+                  <div class="mt-6 flex items-center gap-1 text-yellow-300 text-sm">
+                    ★★★★★ <span class="text-gray-500 ml-2 text-xs">5.0</span>
+                  </div>
+                  <p class="text-primary font-bold mt-4" x-text="t.outcome"></p>
+                </div>
               </div>
-            </div>
-            <div class="testimonial-text">
-              "From 8 LPA to 32 LPA in 14 months. EDHIKE changed my life!"
-            </div>
-            <div class="testimonial-rating">
-              ★★★★★ <span style="color:#9CA3AF;font-size:0.78rem;">5.0</span>
-            </div>
-            <div class="testimonial-outcome">4x salary increase</div>
+            </template>
           </div>
-
-          <div class="testimonial-card">
-            <div class="testimonial-head">
-              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" class="testimonial-avatar" alt="">
-              <div>
-                <div class="testimonial-name">Rahul Verma</div>
-                <div class="testimonial-role">VP Marketing, Flipkart</div>
-              </div>
-            </div>
-            <div class="testimonial-text">
-              "Got 3 offers within 45 days. The placement team is incredible!"
-            </div>
-            <div class="testimonial-rating">
-              ★★★★★ <span style="color:#9CA3AF;font-size:0.78rem;">5.0</span>
-            </div>
-            <div class="testimonial-outcome">From 12 to 28 LPA</div>
-          </div>
-
-          <div class="testimonial-card">
-            <div class="testimonial-head">
-              <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80" class="testimonial-avatar" alt="">
-              <div>
-                <div class="testimonial-name">Ananya Patel</div>
-                <div class="testimonial-role">Finance Manager, Deloitte</div>
-              </div>
-            </div>
-            <div class="testimonial-text">
-              "World-class curriculum and unmatched placement support."
-            </div>
-            <div class="testimonial-rating">
-              ★★★★★ <span style="color:#9CA3AF;font-size:0.78rem;">5.0</span>
-            </div>
-            <div class="testimonial-outcome">Promoted twice in 18 months</div>
-          </div>
-
-          <div class="testimonial-card">
-            <div class="testimonial-head">
-              <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80" class="testimonial-avatar" alt="">
-              <div>
-                <div class="testimonial-name">Vikram Singh</div>
-                <div class="testimonial-role">CEO & Founder</div>
-              </div>
-            </div>
-            <div class="testimonial-text">
-              "Raised $2M after MBA. Thank you EDHIKE!"
-            </div>
-            <div class="testimonial-rating">
-              ★★★★★ <span style="color:#9CA3AF;font-size:0.78rem;">5.0</span>
-            </div>
-            <div class="testimonial-outcome">Founded unicorn startup</div>
-          </div>
-
-          <div class="testimonial-card">
-            <div class="testimonial-head">
-              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" class="testimonial-avatar" alt="">
-              <div>
-                <div class="testimonial-name">Neha Kapoor</div>
-                <div class="testimonial-role">Head of HR, Amazon</div>
-              </div>
-            </div>
-            <div class="testimonial-text">
-              "Switched from IT to HR leadership. Best decision ever!"
-            </div>
-            <div class="testimonial-rating">
-              ★★★★★ <span style="color:#9CA3AF;font-size:0.78rem;">5.0</span>
-            </div>
-            <div class="testimonial-outcome">9 to 35 LPA</div>
-          </div>
-
-          <div class="testimonial-card">
-            <div class="testimonial-head">
-              <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" class="testimonial-avatar" alt="">
-              <div>
-                <div class="testimonial-name">Arjun Mehta</div>
-                <div class="testimonial-role">Investment Banker, JP Morgan</div>
-              </div>
-            </div>
-            <div class="testimonial-text">
-              "Now earning in dollars. Dream come true!"
-            </div>
-            <div class="testimonial-rating">
-              ★★★★★ <span style="color:#9CA3AF;font-size:0.78rem;">5.0</span>
-            </div>
-            <div class="testimonial-outcome">$120K package</div>
-          </div>
-
-          <!-- duplicate the same 6 for seamless loop -->
-          <!-- set 2 -->
-          <!-- (you can copy the same 6 cards again here) -->
         </div>
       </div>
     </div>
   </section>
 
   <!-- Curriculum & Skills -->
-  <section class="section" id="curriculum">
-    <div class="page-container curriculum-grid">
+  <section id="curriculum" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-2 gap-12 items-center">
       <div data-aos="fade-right">
-        <div class="section-heading">Curriculum</div>
-        <h2 class="section-title">Skills You’ll Master</h2>
-
-        <div class="skill-bar">
-          <div class="skill-row">
-            <span class="skill-label">Strategic Thinking</span>
-            <span class="skill-value">95%</span>
+        <span class="text-primary font-bold uppercase text-sm">Curriculum</span>
+        <h2 class="text-4xl sm:text-5xl font-black font-display mt-4">Skills You’ll Master</h2>
+        <div class="mt-8 space-y-6">
+          <div data-aos="fade-up">
+            <div class="flex justify-between mb-2 text-sm sm:text-base"><span class="font-semibold">Strategic Thinking</span><span class="text-primary font-bold">95%</span></div>
+            <div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full transition-all duration-1000" style="width:95%"></div></div>
           </div>
-          <div class="skill-track">
-            <div class="skill-fill" style="width:95%;"></div>
+          <div data-aos="fade-up" data-aos-delay="100">
+            <div class="flex justify-between mb-2 text-sm sm:text-base"><span class="font-semibold">Leadership</span><span class="text-primary font-bold">92%</span></div>
+            <div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full transition-all duration-1000" style="width:92%"></div></div>
           </div>
-        </div>
-
-        <div class="skill-bar">
-          <div class="skill-row">
-            <span class="skill-label">Leadership</span>
-            <span class="skill-value">92%</span>
+          <div data-aos="fade-up" data-aos-delay="200">
+            <div class="flex justify-between mb-2 text-sm sm:text-base"><span class="font-semibold">Data Analytics</span><span class="text-primary font-bold">90%</span></div>
+            <div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full transition-all duration-1000" style="width:90%"></div></div>
           </div>
-          <div class="skill-track">
-            <div class="skill-fill" style="width:92%;"></div>
-          </div>
-        </div>
-
-        <div class="skill-bar">
-          <div class="skill-row">
-            <span class="skill-label">Data Analytics</span>
-            <span class="skill-value">90%</span>
-          </div>
-          <div class="skill-track">
-            <div class="skill-fill" style="width:90%;"></div>
-          </div>
-        </div>
-
-        <div class="skill-bar">
-          <div class="skill-row">
-            <span class="skill-label">Digital Marketing</span>
-            <span class="skill-value">88%</span>
-          </div>
-          <div class="skill-track">
-            <div class="skill-fill" style="width:88%;"></div>
+          <div data-aos="fade-up" data-aos-delay="300">
+            <div class="flex justify-between mb-2 text-sm sm:text-base"><span class="font-semibold">Digital Marketing</span><span class="text-primary font-bold">88%</span></div>
+            <div class="h-3 bg-slate-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-secondary to-accent rounded-full transition-all duration-1000" style="width:88%"></div></div>
           </div>
         </div>
       </div>
 
-      <div data-aos="fade-left">
-        <div class="card">
-          <h3 class="card-title" style="text-align:left;margin-bottom:1.1rem;">Specializations Available</h3>
-          <div>
-            <span class="spec-chip">Finance</span>
-            <span class="spec-chip">Marketing</span>
-            <span class="spec-chip">HR</span>
-            <span class="spec-chip">Operations</span>
-            <span class="spec-chip">IT &amp; Fintech</span>
-            <span class="spec-chip">Digital Marketing</span>
-            <span class="spec-chip">Business Analytics</span>
-            <span class="spec-chip">Healthcare</span>
-          </div>
+      <div class="glass-card p-8 sm:p-10 rounded-3xl" data-aos="fade-left">
+        <h3 class="text-2xl sm:text-3xl font-bold mb-6">Specializations Available</h3>
+        <div class="grid grid-cols-2 gap-4">
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">Finance</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">Marketing</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">HR</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">Operations</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">IT & Fintech</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">Digital Marketing</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">Business Analytics</span>
+          <span class="bg-gradient-to-r from-secondary/10 to-accent/10 text-secondary px-5 py-3 rounded-full text-center font-medium text-sm sm:text-base hover:from-secondary/20 transition">Healthcare</span>
         </div>
       </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section" id="faq">
-    <div class="page-container">
-      <div class="section-heading">FAQ</div>
-      <h2 class="section-title">Got Questions?</h2>
+  <section id="faq" class="py-20">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="text-primary font-bold uppercase tracking-widest text-sm">FAQ</span>
+        <h2 class="text-4xl sm:text-5xl font-black font-display mt-4">Got Questions?</h2>
+      </div>
 
-      <div style="max-width:720px;margin:2.1rem auto 0;display:flex;flex-direction:column;gap:1rem;">
-        <details class="faq-card" open>
-          <summary class="faq-summary">
-            <span>Is the online MBA valid for government jobs?</span>
-            <span class="material-symbols-outlined">expand_more</span>
+      <div class="space-y-5">
+        <details class="glass-card rounded-2xl overflow-hidden" open data-aos="fade-up">
+          <summary class="px-5 sm:px-8 py-5 font-semibold text-lg cursor-pointer flex justify-between items-center hover:bg-slate-100 transition text-secondary">
+            Is the online MBA valid for government jobs?
+            <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
           </summary>
-          <div class="faq-body">
-            Yes, all our partner universities are UGC-approved and NAAC A++ accredited.
-            The degree is 100% valid for private &amp; government jobs.
-          </div>
+          <div class="px-5 sm:px-8 pb-5 text-slate-500 text-sm sm:text-base"><p>Yes, all our partner universities are UGC-approved and NAAC A++ accredited. The degree is 100% valid for private & government jobs.</p></div>
         </details>
-
-        <details class="faq-card">
-          <summary class="faq-summary">
-            <span>How long is the program?</span>
-            <span class="material-symbols-outlined">expand_more</span>
+        <details class="glass-card rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+          <summary class="px-5 sm:px-8 py-5 font-semibold text-lg cursor-pointer flex justify-between items-center hover:bg-slate-100 transition text-secondary">
+            How long is the program? <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
           </summary>
-          <div class="faq-body">
-            2 years (4 semesters) with flexible pacing options.
-          </div>
+          <div class="px-5 sm:px-8 pb-5 text-slate-500 text-sm sm:text-base"><p>2 years (4 semesters) with flexible pacing options.</p></div>
         </details>
-
-        <details class="faq-card">
-          <summary class="faq-summary">
-            <span>Will I get placement support?</span>
-            <span class="material-symbols-outlined">expand_more</span>
+        <details class="glass-card rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+          <summary class="px-5 sm:px-8 py-5 font-semibold text-lg cursor-pointer flex justify-between items-center hover:bg-slate-100 transition text-secondary">
+            Will I get placement support? <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
           </summary>
-          <div class="faq-body">
-            Yes, we provide 100% placement assistance until you get placed.
-          </div>
+          <div class="px-5 sm:px-8 pb-5 text-slate-500 text-sm sm:text-base"><p>Yes, dedicated placement cell with 100% assistance until you get placed.</p></div>
         </details>
-
-        <details class="faq-card">
-          <summary class="faq-summary">
-            <span>Can I pay in EMI?</span>
-            <span class="material-symbols-outlined">expand_more</span>
+        <details class="glass-card rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+          <summary class="px-5 sm:px-8 py-5 font-semibold text-lg cursor-pointer flex justify-between items-center hover:bg-slate-100 transition text-secondary">
+            Can I pay in EMI? <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
           </summary>
-          <div class="faq-body">
-            Yes, 0% interest EMI options are available from all major banks.
-          </div>
+          <div class="px-5 sm:px-8 pb-5 text-slate-500 text-sm sm:text-base"><p>Yes, 0% interest EMI options available from all major banks.</p></div>
         </details>
-
-        <details class="faq-card">
-          <summary class="faq-summary">
-            <span>Are classes recorded?</span>
-            <span class="material-symbols-outlined">expand_more</span>
+        <details class="glass-card rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay="400">
+          <summary class="px-5 sm:px-8 py-5 font-semibold text-lg cursor-pointer flex justify-between items-center hover:bg-slate-100 transition text-secondary">
+            Are classes recorded? <span class="material-symbols-outlined transition-transform duration-300">expand_more</span>
           </summary>
-          <div class="faq-body">
-            All live classes are recorded and available 24/7 on the learning portal.
-          </div>
+          <div class="px-5 sm:px-8 pb-5 text-slate-500 text-sm sm:text-base"><p>All live classes are recorded and available 24/7.</p></div>
         </details>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer>
-    <div class="page-container">
-      <div class="footer-grid">
-        <div>
-          <div class="logo-wrap" style="margin-bottom:0.8rem;">
-            <div class="logo-square" style="width:34px;height:34px;font-size:1rem;">E</div>
-            <div class="logo-text-main font-display">ED<span>HIKE</span></div>
-          </div>
-          <p class="footer-text">
-            Helping professionals fast-track their careers since 2018.
-          </p>
+  <footer class="bg-white py-14 border-t border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div>
+        <div class="flex items-center gap-4 mb-6">
+          <svg width="40" height="40" viewBox="0 0 64 64" fill="none">
+            <rect width="64" height="64" rx="16" fill="url(#logoGrad)"/>
+            <path d="M17 41V23L30 28V41" stroke="white" stroke-width="4"/>
+            <path d="M33 23L47 29V41L33 35V23Z" stroke="white" stroke-width="4"/>
+            <defs><linearGradient id="logoGrad"><stop stop-color="#E53935"/><stop offset="1" stop-color="#2A2574"/></linearGradient></defs>
+          </svg>
+          <div class="text-2xl font-bold font-display">ED<span class="text-primary">HIKE</span></div>
         </div>
-
-        <div>
-          <div class="footer-title">Quick Links</div>
-          <div class="footer-links">
-            <a href="#programs">Programs</a>
-            <a href="#curriculum">Curriculum</a>
-            <a href="#testimonials">Placement Report</a>
-            <a href="#faq">Contact</a>
-          </div>
-        </div>
-
-        <div>
-          <div class="footer-title">Contact Us</div>
-          <p class="footer-text">+91 98765 43210 (10AM–8PM)</p>
-          <p class="footer-text" style="margin-top:0.4rem;">admissions@edhike.com</p>
-        </div>
-
-        <div>
-          <div class="footer-title">Stay Updated</div>
-          <div class="footer-subscribe">
-            <input type="email" class="footer-input" placeholder="Your email">
-            <button class="footer-button">Subscribe</button>
-          </div>
-        </div>
+        <p class="text-sm text-slate-500">Helping professionals fast-track their careers since 2018.</p>
       </div>
-
-      <div class="footer-bottom">
-        © 2025 EDHIKE Learning Pvt Ltd. All rights reserved.
+      <div>
+        <h4 class="font-bold mb-4 text-secondary">Quick Links</h4>
+        <ul class="space-y-3 text-sm text-slate-500">
+          <li><a href="#programs" class="hover:text-primary">Programs</a></li>
+          <li><a href="#curriculum" class="hover:text-primary">Curriculum</a></li>
+          <li><a href="#testimonials" class="hover:text-primary">Placement Report</a></li>
+          <li><a href="#faq" class="hover:text-primary">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-bold mb-4 text-secondary">Contact Us</h4>
+        <p class="text-sm text-slate-500">+91 98765 43210 (10AM–8PM)</p>
+        <p class="text-sm text-slate-500 mt-3">admissions@edhike.com</p>
+      </div>
+      <div>
+        <h4 class="font-bold mb-4 text-secondary">Stay Updated</h4>
+        <form class="flex flex-col sm:flex-row gap-3">
+          <input type="email" placeholder="Your email" class="px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 flex-1"/>
+          <button class="bg-primary text-white px-6 py-3 rounded-xl">Subscribe</button>
+        </form>
       </div>
     </div>
+    <div class="text-center text-xs sm:text-sm text-slate-500 mt-10">© 2025 EDHIKE Learning Pvt Ltd. All rights reserved.</div>
   </footer>
 
-  <!-- WhatsApp -->
-  <a href="https://wa.me/919876543210" target="_blank" class="whatsapp-float">
-    <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
+  <!-- Floating WhatsApp -->
+  <a href="https://wa.me/919876543210" target="_blank" class="floating-whatsapp fixed right-6 bottom-6 z-40 bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded-full shadow-2xl flex items-center gap-3 hover:scale-110 transition-all duration-300 font-semibold text-base sm:text-lg">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.814-2.39-2.537-.077-.123-.114-.223-.038-.334.076-.111.266-.316.41-.492.144-.175.187-.297.187-.447 0-.15-.074-.447-.297-.744-.223-.297-.522-.522-.816-.597-.147-.037-.297-.074-.444-.074-.297 0-.52.074-.816.297-.297.223-1.021 1.011-1.021 2.464 0 1.453 1.056 2.858 1.203 3.056.147.198 3.42 5.238 4.947 5.087.52-.149 1.663-.672 1.902-.783.24-.111.407-.185.556-.297.15-.111.297-.223.297-.446 0-.223-.074-.446-.297-.669zM12 21.75c-5.385 0-9.75-4.365-9.75-9.75S6.615 2.25 12 2.25 21.75 6.615 21.75 12 17.385 21.75 12 21.75zm0-18c-4.963 0-9 4.037-9 9s4.037 9 9 9 9-4.037 9-9-4.037-9-9-9z"/>
     </svg>
     Chat Now
   </a>
 
-  <!-- Mobile bottom CTA -->
-  <div class="mobile-cta">
-    <a href="#book-call">Get Free Counselling Call Now</a>
+  <!-- Mobile Sticky CTA -->
+  <div class="fixed bottom-0 left-0 right-0 p-4 bg-primary text-white text-center font-bold py-4 md:hidden z-40 shadow-2xl">
+    <a href="#book-call" class="block">Get Free Counselling Call Now</a>
   </div>
 
-  <!-- Scripts -->
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
   <script>
-    // AOS init
-    AOS.init({
-      once: true,
-      duration: 800,
-      easing: 'ease-out-cubic'
-    });
+    AOS.init({ once: true, duration: 800 });
 
-    // Countdown
+    // Countdown Timer
     const targetDate = new Date(Date.now() + 3*24*60*60*1000);
     function updateTimer() {
       const diff = targetDate - new Date();
-      if (diff <= 0) return;
-
+      const countdown = document.getElementById('countdown');
+      if (!countdown) return;
+      if (diff <= 0) { countdown.innerHTML = "Offer Ended"; return; }
       const h = Math.floor(diff / 3600000);
       const m = Math.floor((diff % 3600000) / 60000);
       const s = Math.floor((diff % 60000) / 1000);
-
       document.getElementById('cd-hrs').textContent = h;
-      document.getElementById('cd-min').textContent = String(m).padStart(2, '0');
-      document.getElementById('cd-sec').textContent = String(s).padStart(2, '0');
+      document.getElementById('cd-min').textContent = m.toString().padStart(2, '0');
+      document.getElementById('cd-sec').textContent = s.toString().padStart(2, '0');
     }
     setInterval(updateTimer, 1000);
     updateTimer();
 
-    // Lead form success
-    const leadForm = document.getElementById('leadForm');
-    const formSuccess = document.getElementById('formSuccess');
-    if (leadForm) {
-      leadForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        leadForm.style.display = 'none';
-        formSuccess.style.display = 'block';
-      });
-    }
+    // Form Success
+    document.getElementById('leadForm')?.addEventListener('submit', function(e) {
+      e.preventDefault();
+      this.classList.add('hidden');
+      document.getElementById('formSuccess').classList.remove('hidden');
+    });
 
     // Mobile menu toggle
     const mobileToggle = document.getElementById('mobileToggle');
-    const mobileMenu   = document.getElementById('mobileMenu');
+    const mobileMenu = document.getElementById('mobileMenu');
     const mobileOverlay = document.getElementById('mobileOverlay');
+    const body = document.body;
 
-    function openMenu() {
-      mobileMenu.style.display = 'block';
-      mobileOverlay.style.display = 'block';
-      requestAnimationFrame(() => { mobileOverlay.style.opacity = '1'; });
-      mobileToggle.querySelector('.material-symbols-outlined').textContent = 'close';
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeMenu() {
-      mobileMenu.style.display = 'none';
-      mobileOverlay.style.opacity = '0';
-      setTimeout(() => { mobileOverlay.style.display = 'none'; }, 200);
+    function closeMobileMenu() {
+      body.classList.remove('overflow-hidden', 'mobile-nav-open');
+      mobileMenu.classList.add('hidden');
+      mobileOverlay.classList.add('pointer-events-none', 'hidden');
+      mobileOverlay.style.opacity = 0;
+      mobileToggle.setAttribute('aria-expanded', 'false');
       mobileToggle.querySelector('.material-symbols-outlined').textContent = 'menu';
-      document.body.style.overflow = '';
     }
 
-    if (mobileToggle) {
-      mobileToggle.addEventListener('click', () => {
-        if (mobileMenu.style.display === 'block') {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
+    function openMobileMenu() {
+      mobileMenu.classList.remove('hidden');
+      body.classList.add('overflow-hidden', 'mobile-nav-open');
+      mobileOverlay.classList.remove('pointer-events-none', 'hidden');
+      requestAnimationFrame(() => { mobileOverlay.style.opacity = 1; });
+      mobileToggle.setAttribute('aria-expanded', 'true');
+      mobileToggle.querySelector('.material-symbols-outlined').textContent = 'close';
     }
 
-    if (mobileOverlay) {
-      mobileOverlay.addEventListener('click', closeMenu);
-    }
-
-    document.querySelectorAll('#mobileMenu a').forEach(link => {
-      link.addEventListener('click', closeMenu);
+    mobileToggle?.addEventListener('click', () => {
+      if (mobileMenu.classList.contains('hidden')) {
+        openMobileMenu();
+      } else {
+        closeMobileMenu();
+      }
     });
 
-
-    (function(){
-  // Throttle helper
-  function throttle(fn, ms){
-    let last = 0;
-    return function(...args){
-      const now = Date.now();
-      if (now - last >= ms) { last = now; fn(...args); }
-    };
-  }
-
-  // Send scroll position to parent
-  const sendScroll = throttle(() => {
-    // send normalized scroll (0..1) and pixel position
-    const top = window.scrollY || document.documentElement.scrollTop || 0;
-    const height = document.documentElement.scrollHeight - window.innerHeight;
-    const pct = height > 0 ? top / height : 0;
-    window.parent.postMessage({ type: 'iframe-scroll', top, pct }, '*');
-  }, 40); // ~25fps
-
-  window.addEventListener('scroll', sendScroll, { passive: true });
-
-  // Receive messages from parent (e.g., set scroll, trigger animation)
-  window.addEventListener('message', (e) => {
-    // You can validate e.origin here if you want to restrict
-    const msg = e.data || {};
-    if (msg && msg.type === 'parent-set-scroll') {
-      // set scroll inside iframe
-      window.scrollTo({ top: msg.top || 0, behavior: 'auto' });
-    } else if (msg && msg.type === 'parent-command') {
-      // custom commands: run animation, pause, resume, etc.
-      // handle accordingly
-    }
-  });
-
-  // Optional: on load notify parent about current height (useful if parent must resize iframe)
-  function sendHeight(){
-    const h = document.documentElement.scrollHeight;
-    window.parent.postMessage({ type: 'iframe-height', height: h }, '*');
-  }
-  window.addEventListener('load', sendHeight);
-  window.addEventListener('resize', throttle(sendHeight, 200));
-})();
+    mobileOverlay?.addEventListener('click', closeMobileMenu);
+    document.querySelectorAll('#mobileMenu a').forEach(link => link.addEventListener('click', closeMobileMenu));
   </script>
 </body>
 </html>
+
